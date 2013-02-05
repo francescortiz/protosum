@@ -1,5 +1,5 @@
 
-pacaclass
+PacaClass
 =========
 
 Javascript pythonish multiple inheritance class system.
@@ -13,6 +13,25 @@ Framework to work with class inheritance. It is pythonish, so remember:
   - You have multiple inheritance
   - Always use this ot access methods or atributes
   - Everything is public... well, we are on javascript, do your tricks if you need to.
+  
+ 
+How does pacaclass compare to Twitter Flight
+---------------
+  
+Now that twitter has released [Flight http://twitter.github.com/flight/], a javascript library that ,among other things, follows a similar principle, it is good to see what differences you will find.
+Instead of multiple inheritance they use mixins, a way of adding functionality to classes. Here is a list of functionalities you miss with twitter flight:
+
+- real multiple inheritance (mixins overwrite your classes, instead of your class overwriting the superclasses).
+- the "isInstance" method supports multiple inheritance.
+- When you declare the classes you define what you want to extend, you don't have to look anywhere else to see what functionalities you added to the class.
+- pacaclass gives you access to the prototype of superclasses. Twitter's Flight mixins overwrite your class.
+
+Then, there are other features that you don't get with pacaclass, because it is only fucused in multiple inheritance, but that you will get with pacaclass-lib:
+
+- Event system (based on ActionScript 3 event system).
+- Dom integration (jquery or native).
+- Template system (implemented with pure templates), but easily extendable.
+- Gaming library (alpha state - usable for complex animations).
 
 
 USAGE
@@ -34,7 +53,7 @@ Then, for the instances you have:
 - [instance].getSuper([superclass])
   * returns the specified super prototype.
 
-
+  
 EXAMPLE
 ----------------
 
@@ -106,6 +125,13 @@ Loads javascript dynamically.
 Simple logger.
 
     log('something');
+    
+
+Debugging tips
+-------------------
+
+- All pacaclass prototypes come with a __name__ attribute, and all instances come with __class__.__name__, if you defined a name for the class.
+- In crome classes appear encapsulated under a variable that is named after the class.
 
 
 LIMITATIONS
