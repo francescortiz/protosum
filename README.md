@@ -23,7 +23,6 @@ Instead of multiple inheritance they use mixins, a way of adding functionality t
 
 - real multiple inheritance (mixins overwrite your classes, instead of your class overwriting the superclasses).
 - the "isInstance" method supports multiple inheritance.
-- When you declare the classes you define what you want to extend, you don't have to look anywhere else to see what functionalities you added to the class.
 - pacaclass gives you access to the prototype of superclasses. Twitter's Flight mixins overwrite your class.
 
 Then, there are other features that you don't get with pacaclass, because it is only fucused in multiple inheritance, but that you will get with pacaclass-lib https://github.com/francescortiz/pacaclass-lib :
