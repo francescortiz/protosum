@@ -1,12 +1,12 @@
 /***************
-http://github.com/francescortiz/pacaclass
+ http://github.com/francescortiz/pacaclass
 
-****************/
+ ****************/
 
 /**
  * Simple logger
  */
-var log = function(){
+var log = function () {
     var stderr = document.getElementById('stderr');
     if (stderr) {
         var m = "";
@@ -34,8 +34,8 @@ var log = function(){
  * @param [args] {Array} If provided, the function will receive this array as arguments instead of the provided by the caller.
  * @return {Function}
  */
-var delegate = function (method, instance, args ) {
-    return function() {
+var delegate = function (method, instance, args) {
+    return function () {
         if (args) {
             return method.apply(instance, args);
         } else {
@@ -48,7 +48,7 @@ var getClassName = function (classReference) {
     // search through the global object for a name that resolves to this object
     for (var name in this)
         if (this[name] == classReference)
-            return name
+            return name;
 }
 
 
@@ -57,20 +57,32 @@ var getClassName = function (classReference) {
  * @return {Function}
  * @constructor
  */
-var PacaClass = function() {
+var PacaClass = function () {
 
 
-    var args = arguments;
+    var className = "PacaClass";
 
-    var pacaclass = function(){
-        this.constructor && this.constructor.apply(this,arguments);
-    };
+    var args = arguments ? arguments : [];
+
+    if (typeof args[0] == "string") {
+        var className = args[0];
+        var na = [];
+        for (var i = 1; i < args.length; i++) {
+            na.push(args[i]);
+        }
+        args = na;
+    }
+
+    var pacaclass;
+    eval("var " + className + " = function(){this.constructor && this.constructor.apply(this,arguments);};");
+    eval("pacaclass = " + className);
+    pacaclass.__name__ = className;
     pacaclass.supers = [];
     pacaclass.prototype.__class__ = pacaclass;
-    pacaclass.prototype.destroy = function() {
+    pacaclass.prototype.destroy = function () {
         // empty destructor
     }
-    pacaclass.prototype.getSuper = function(requestedSuper){
+    pacaclass.prototype.getSuper = function (requestedSuper) {
 
         var len = this.__class__.supers.length;
         for (var i = 0; i < len; i++) {
@@ -84,11 +96,11 @@ var PacaClass = function() {
 
     }
 
-    pacaclass.prototype.delegate = function(method, args) {
+    pacaclass.prototype.delegate = function (method, args) {
         return delegate(method, this, args);
     }
 
-    pacaclass.prototype.isInstance = function(requestedSuper) {
+    pacaclass.prototype.isInstance = function (requestedSuper) {
         if (this instanceof requestedSuper) {
             return true;
         }
@@ -104,21 +116,15 @@ var PacaClass = function() {
         }
         return false;
     }
-    if (typeof args[0] == "string") {
-        pacaclass.__name__ = args[0];
-        var na = []
-        for (var i = 1; i < args.length; i++) {
-            na.push(args[i]);
-        }
-        args = na;
-    }
+
 
     if (!args.length) {
         return pacaclass;
     }
-    
-    var copyProto = function(sub, _super) {
-        var thinF = function(){};
+
+    var copyProto = function (sub, _super) {
+        var thinF = function () {
+        };
         thinF.prototype = _super.prototype;
         var newProto = new thinF();
         for (var i in sub.prototype) {
@@ -126,25 +132,25 @@ var PacaClass = function() {
         }
         sub.prototype = newProto;
     }
-    
+
     //var supers = [];
-    var single = function(sub, _super) {
+    var single = function (sub, _super) {
         copyProto(sub, _super);
 
-        if( _super.prototype.constructor == Object.prototype.constructor ){
+        if (_super.prototype.constructor == Object.prototype.constructor) {
             _super.prototype.constructor = _super;
         }
-        
+
     }
-    
-    var multi = function(sub,_super){
-        
+
+    var multi = function (sub, _super) {
+
         var proto = _super.prototype;
         for (var f in proto) {
             if (sub.prototype[f] === undefined) {
                 if (proto[f] == "function") {
-                    sub.prototype[f] = function() {
-                        return proto[f].apply(this,arguments);
+                    sub.prototype[f] = function () {
+                        return proto[f].apply(this, arguments);
                     }
                 } else {
                     sub.prototype[f] = proto[f];
@@ -158,7 +164,7 @@ var PacaClass = function() {
     if (args[0].supers.length) {
         pacaclass.supers = pacaclass.supers.concat(args[0].supers);
     }
-    for( var i = 1; i < args.length; i++){
+    for (var i = 1; i < args.length; i++) {
         multi(pacaclass, args[i]);
         pacaclass.supers.push(args[i]);
         if (args[i].supers.length) {
@@ -167,14 +173,14 @@ var PacaClass = function() {
     }
 
     return pacaclass;
-    
+
 };
 
 PacaClass.settings = {
     /**
      * JS include base path. Makes code portable.
      */
-    JS_PATH:''
+    JS_PATH: ''
 };
 
 /**
@@ -183,7 +189,7 @@ PacaClass.settings = {
  * @param [async] {Boolean}
  * @param [async_listener] {Function}
  */
-PacaClass.include = function(src, async, async_listener) {
+PacaClass.include = function (src, async, async_listener) {
 
     if (!async) {
         async = false;
@@ -191,11 +197,12 @@ PacaClass.include = function(src, async, async_listener) {
     var async_listener = async_listener;
 
     function GetHttpRequest() {
-        if ( window.XMLHttpRequest ) // Gecko
+        if (window.XMLHttpRequest) // Gecko
             return new XMLHttpRequest();
-        else if ( window.ActiveXObject ) // IE
-            return new ActiveXObject("MsXml2.XmlHttp") ;
+        else if (window.ActiveXObject) // IE
+            return new ActiveXObject("MsXml2.XmlHttp");
     }
+
     function IncludeJS(sId, fileUrl, source) {
         if (source != null && !document.getElementById(sId)) {
             var oHead = document.getElementsByTagName('HEAD').item(0);
@@ -208,11 +215,12 @@ PacaClass.include = function(src, async, async_listener) {
             oHead.appendChild(oScript);
         }
     }
+
     function AjaxPage(sId, url, async) {
         var sId = sId;
         var async = async;
         var oXmlHttp = GetHttpRequest();
-        oXmlHttp.OnReadyStateChange = function() {
+        oXmlHttp.OnReadyStateChange = function () {
             if (oXmlHttp.readyState == 4) {
                 if (oXmlHttp.status == 200 || oXmlHttp.status == 304) {
                     if (async) {
@@ -222,7 +230,7 @@ PacaClass.include = function(src, async, async_listener) {
                         }
                     }
                 } else {
-                    log( 'XML request error: ' + oXmlHttp.statusText + ' (' + oXmlHttp.status + ')' ) ;
+                    log('XML request error: ' + oXmlHttp.statusText + ' (' + oXmlHttp.status + ')');
                 }
             }
         }
@@ -232,6 +240,7 @@ PacaClass.include = function(src, async, async_listener) {
             IncludeJS(sId, url, oXmlHttp.responseText);
         }
     }
+
     if (src.indexOf("http") != -1) {
         AjaxPage(src, src, async);
     } else {
