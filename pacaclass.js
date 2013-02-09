@@ -10,13 +10,20 @@ var log = function () {
     var stderr = document.getElementById('stderr');
     if (stderr) {
         var m = "";
+        var sep = "";
         for (var i = 0; i < arguments.length; i++) {
-            m += arguments[i] + ", ";
+            var v = arguments[i];
+            if (typeof v == 'string') {
+                m += sep + '"' + v + '"';
+            } else {
+                m += sep + v;
+            }
+            sep = ', ';
         }
         stderr.innerHTML += m + "<br/>";
     } else {
         try {
-            console.log(arguments);
+            console.log.apply(console, arguments);
         } catch (e) {
             var m = "";
             for (var i = 0; i < arguments.length; i++) {
@@ -52,6 +59,8 @@ var getClassName = function (classReference) {
 }
 
 
+var __pacaclass_used_names__ = ",";
+
 /**
  *
  * @return {Function}
@@ -66,11 +75,20 @@ var PacaClass = function () {
 
     if (typeof args[0] == "string") {
         var className = args[0];
+        if (__pacaclass_used_names__.indexOf("," + className + ",") != -1) {
+            log("PACACLASS WARNING: class name \"" + className + "\" already in use.");
+        }
+        __pacaclass_used_names__ += className + ",";
+        if (window[className]) {
+            log("PACACLASS WARNING: \"" + className + "\" is overwriting an existing window attribute.");
+        }
         var na = [];
         for (var i = 1; i < args.length; i++) {
             na.push(args[i]);
         }
         args = na;
+    } else {
+        throw new Error('First PacaClass argument must be the class name.');
     }
 
     var pacaclass;
@@ -94,6 +112,10 @@ var PacaClass = function () {
 
         throw new Error("getSuper: " + getClassName(requestedSuper) + " is not a superclass of " + getClassName(this.__class__))
 
+    }
+
+    pacaclass.prototype.toString = function() {
+        return '[PacaClass: ' + this.__class__.__name__ + ']';
     }
 
     pacaclass.prototype.delegate = function (method, args) {
