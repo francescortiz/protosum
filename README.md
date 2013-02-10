@@ -58,28 +58,33 @@ EXAMPLE
 
 Sample class
 
-    var C = PacaClass(A, B); (function() { var public = C.prototype;
+    var C = PacaClass(A, B); (function() {
+        var proto = C.prototype;
 
-        public.someVar = "somveValue";
-        public.c = "99";
+        proto.someVar = "somveValue";
+        proto.c = "99";
+
+        // Objects and Arrays are assigned by reference, so this creates a shared object. Use static access instead to make code more readable.
+        proto.d = {};
+
         C.public_static_var = 'something';
         
-        public.constructor = function(){
+        proto.constructor = function(){
             this.getSuper(A).constructor.call(this, 'argument1', 'argument2');
             log("C constructor");
         }
 
-        public.doC = function() {
+        proto.doC = function() {
             log(this.c);
         }
 
-        public.whoAmI = function() {
+        proto.whoAmI = function() {
             log("i am C and my supers say: ");
             this.getSuper(A).whoAmI.call(this); // calls whoAmI in A
             this.getSuper(B).whoAmI.call(this);  // calls whoAmI in B
         }
         
-        public.customeEvent = function(event) {
+        proto.customeEvent = function(event) {
             log("C.customEvent", "event.data = ", event.data, "this.someVar = ",this.someVar);
         }
 
@@ -150,3 +155,5 @@ CONSIDERATIONS
   access to them before class initialization.
 - the proposed class declaration structure looks for being clear comfortable coming from
   other OOP languages.
+- variable initialization of referenced values (objects, arrays) must be done inside the constructor, otherwise you get the same
+  reference passed to all the instances.
