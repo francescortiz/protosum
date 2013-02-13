@@ -21,12 +21,18 @@
 
     /**
      * Bind a function to a context, making call and apply and other properties work as if no binding was applied.
+     * It is intended to be used with class methods. It is intended to automate calls to delegate, but might
+     * not be applied at all, because then delegating is used even when no delegating is needed. Less performance.
+     *
+     * A alternative could be to make a tool to automatically set
+     *     instance.delegated.method = __pc_bind_method__(instance.method, instance)
+     *
      * @param func Function
      * @param context *
      * @return Function
      * @private
      */
-    var __pc_bind_func__ = function(func, context) {
+    var __pc_bind_method__ = function(func, context) {
         var f = delegate(func, context);
         f.__pc_context__ = context;
         f.__pc_orig__ = func;
@@ -122,22 +128,27 @@
 
     };
 
-    var copyProto = function (sub, _super) {
-        var thinF = function () {
-        };
-        thinF.prototype = _super.prototype;
-        var newProto = new thinF();
-        for (var i in sub.prototype) {
-            newProto[i] = sub.prototype[i];
-        }
-        sub.prototype = newProto;
-    }
+// TODO: Check that we didn't break anything
+//    var copyProto = function (sub, _super) {
+//        var thinF = function () {
+//        };
+//        thinF.prototype = _super.prototype;
+//        var newProto = new thinF();
+//        for (var i in sub.prototype) {
+//            newProto[i] = sub.prototype[i];
+//        }
+//        sub.prototype = newProto;
+//    }
 
     var single = function (sub, _super) {
-        copyProto(sub, _super);
-        if (_super.prototype.constructor == Object.prototype.constructor) {
-            _super.prototype.constructor = _super;
-        }
+        // TODO: Check that we didn't break anything
+//        copyProto(sub, _super);
+//        if (_super.prototype.constructor == Object.prototype.constructor) {
+//            _super.prototype.constructor = _super;
+//        }
+
+        multi(sub, _super);
+
     }
 
     var multi = function (sub, _super) {
