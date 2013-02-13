@@ -19,6 +19,29 @@
 
 (function(window) {
 
+    /**
+     * Bind a function to a context, making call and apply work as if no binding was applied.
+     * @param context
+     * @return {*}
+     * @private
+     */
+    Function.prototype.__pc_bind__ = function(context) {
+        var f = delegate(this, context);
+        f.__pc_context__ = context;
+        f.__pc_orig__ = this;
+        f.call = function() {
+            var context = arguments[0];
+            Array.prototype.shift.call(arguments);
+            return f.__pc_orig__.apply(context, arguments);
+        }
+        f.apply = function(context, arguments) {
+            return f.__pc_orig__.apply(context, arguments);
+        }
+        f.toString = this.toString;
+        f.length = this.length;
+        return f;
+    }
+
 
     /**
      * Simple logger
@@ -59,10 +82,12 @@
      * @return {Function}
      */
     var delegate = function (method, instance, args) {
-        return function () {
-            if (args) {
+        if (args) {
+            return function () {
                 return method.apply(instance, args);
-            } else {
+            }
+        } else {
+            return function () {
                 return method.apply(instance, arguments);
             }
         }
