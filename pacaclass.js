@@ -20,15 +20,16 @@
 (function(window) {
 
     /**
-     * Bind a function to a context, making call and apply work as if no binding was applied.
-     * @param context
-     * @return {*}
+     * Bind a function to a context, making call and apply and other properties work as if no binding was applied.
+     * @param func Function
+     * @param context *
+     * @return Function
      * @private
      */
-    Function.prototype.__pc_bind__ = function(context) {
-        var f = delegate(this, context);
+    var __pc_bind_func__ = function(func, context) {
+        var f = delegate(func, context);
         f.__pc_context__ = context;
-        f.__pc_orig__ = this;
+        f.__pc_orig__ = func;
         f.call = function() {
             var context = arguments[0];
             Array.prototype.shift.call(arguments);
@@ -37,8 +38,8 @@
         f.apply = function(context, arguments) {
             return f.__pc_orig__.apply(context, arguments);
         }
-        f.toString = this.toString;
-        f.length = this.length;
+        f.toString = func.toString;
+        f.length = func.length;
         return f;
     }
 
@@ -75,7 +76,7 @@
     };
 
     /**
-     * delegate a function to an objec.
+     * delegate a function to an object.
      * @param method {Function}
      * @param instance {Object}
      * @param [args] {Array} If provided, the function will receive this array as arguments instead of the provided by the caller.
@@ -143,13 +144,7 @@
         var proto = _super.prototype;
         for (var f in proto) {
             if (sub.prototype[f] === undefined) {
-                if (proto[f] == "function") {
-                    sub.prototype[f] = function () {
-                        return proto[f].apply(this, arguments);
-                    }
-                } else {
-                    sub.prototype[f] = proto[f];
-                }
+                sub.prototype[f] = proto[f];
             }
         }
     }
