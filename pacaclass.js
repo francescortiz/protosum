@@ -19,10 +19,6 @@
 
 (function(window) {
 
-    if (window.PacaClass && window.PacaClass.__rookie__) {
-        throw new Error("PacaClass Rookie detected. Either use rookie version or standard version.");
-    }
-
     /**
      * Simple logger
      */
@@ -87,41 +83,31 @@
         return '[PacaClass: ' + this.__class__.__name__ + ']';
     }
 
+    /**
+     *
+     * @param [requestedSuper]  Class  if not provided returns de default super.
+     * @return {*}
+     * @private
+     */
     var __pacaclass_getSuper__ = function (requestedSuper) {
-
         var len = this.__class__.supers.length;
-        for (var i = 0; i < len; i++) {
-            var _super = this.__class__.supers[i];
-            if (_super === requestedSuper) {
-                return _super.prototype;
+        if (requestedSuper) {
+            for (var i = 0; i < len; i++) {
+                var _super = this.__class__.supers[i];
+                if (_super === requestedSuper) {
+                    return _super.prototype;
+                }
+            }
+            throw new Error("getSuper: " + getClassName(requestedSuper) + " is not a superclass of " + getClassName(this.__class__))
+        } else {
+            if (len) {
+                return this.__class__.supers[0];
             }
         }
-
-        throw new Error("getSuper: " + getClassName(requestedSuper) + " is not a superclass of " + getClassName(this.__class__))
-
     };
 
-// TODO: Check that we didn't break anything
-//    var copyProto = function (sub, _super) {
-//        var thinF = function () {
-//        };
-//        thinF.prototype = _super.prototype;
-//        var newProto = new thinF();
-//        for (var i in sub.prototype) {
-//            newProto[i] = sub.prototype[i];
-//        }
-//        sub.prototype = newProto;
-//    }
-
     var single = function (sub, _super) {
-        // TODO: Check that we didn't break anything
-//        copyProto(sub, _super);
-//        if (_super.prototype.constructor == Object.prototype.constructor) {
-//            _super.prototype.constructor = _super;
-//        }
-
         multi(sub, _super);
-
     }
 
     var multi = function (sub, _super) {
@@ -134,9 +120,7 @@
     }
 
     /**
-     *
      * @return {Function}
-     * @constructor
      */
     var PacaClass = function () {
 
