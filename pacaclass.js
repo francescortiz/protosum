@@ -19,36 +19,9 @@
 
 (function(window) {
 
-    /**
-     * Bind a function to a context, making call and apply and other properties work as if no binding was applied.
-     * It is intended to be used with class methods. It is intended to automate calls to delegate, but might
-     * not be applied at all, because then delegating is used even when no delegating is needed. Less performance.
-     *
-     * A alternative could be to make a tool to automatically set
-     *     instance.delegated.method = __pc_bind_method__(instance.method, instance)
-     *
-     * @param func Function
-     * @param context *
-     * @return Function
-     * @private
-     */
-    var __pc_bind_method__ = function(func, context) {
-        var f = delegate(func, context);
-        f.__pc_context__ = context;
-        f.__pc_orig__ = func;
-        f.call = function() {
-            var context = arguments[0];
-            Array.prototype.shift.call(arguments);
-            return f.__pc_orig__.apply(context, arguments);
-        }
-        f.apply = function(context, arguments) {
-            return f.__pc_orig__.apply(context, arguments);
-        }
-        f.toString = func.toString;
-        f.length = func.length;
-        return f;
+    if (window.PacaClass && window.PacaClass.__rookie__) {
+        throw new Error("PacaClass Rookie detected. Either use rookie version or standard version.");
     }
-
 
     /**
      * Simple logger
@@ -119,7 +92,7 @@
         var len = this.__class__.supers.length;
         for (var i = 0; i < len; i++) {
             var _super = this.__class__.supers[i];
-            if (_super == requestedSuper) {
+            if (_super === requestedSuper) {
                 return _super.prototype;
             }
         }
