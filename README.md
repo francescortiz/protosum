@@ -23,24 +23,6 @@ Framework to work with class inheritance. It is pythonish, so remember:
   - Everything is public... well, we are on javascript, do your tricks if you need to.
   
  
-How does protosum compare to Twitter Flight
----------------
-  
-Now that twitter has released Flight http://twitter.github.com/flight/ , a javascript library that, among other things, follows a similar principle, it is good to see what differences you will find.
-Instead of multiple inheritance they use mixins, a way of adding functionality to classes. Here is a list of functionalities you miss with twitter flight:
-
-- real multiple inheritance (mixins overwrite your classes, instead of your class overwriting the superclasses).
-- the "isInstance" method supports multiple inheritance.
-- protosum gives you access to the prototype of superclasses. Twitter's Flight mixins overwrite your class.
-
-Then, there are other features that you don't get with protosum, because it is only fucused in multiple inheritance, but that you will get with protosum-lib https://github.com/francescortiz/protosum-lib :
-
-- Event system (based on ActionScript 3 event system).
-- Dom integration (jquery or native).
-- Template system (implemented with pure templates), but easily extendable.
-- Gaming library (alpha state - usable for complex animations).
-
-
 USAGE
 -----------
 
