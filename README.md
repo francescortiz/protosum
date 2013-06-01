@@ -69,9 +69,9 @@ Sample class
 
         C.public_static_var = 'something';
         
-        proto.constructor = function(){
-            this.getSuper(A).constructor.call(this, 'argument1', 'argument2');
-            log("C constructor");
+        proto.__init__ = function(){
+            this.getSuper(A).__init__.call(this, 'argument1', 'argument2');
+            log("C __init__");
         }
 
         proto.doC = function() {
@@ -143,17 +143,17 @@ LIMITATIONS
 
 - Forget about private. But since the implementation is pythonish, and python doesn't
   have the concept of private, it is fine.
-- Always provide a constructor, unless you are sure that no superclass has a
-  constructor, to prevent unwanted repeated constructor calls.
+- Always provide a __init__, unless you are sure that no superclass has a
+  __init__, to prevent unwanted repeated __init__ calls.
 
 
 CONSIDERATIONS
 -----------------------------
 
 - super and import are reserved words, so getSuper and include have been chosen instead.
-- Declare public methods and attributes outside the constructor. Easiear to read. Allows
+- Declare public methods and attributes outside the __init__. Easiear to read. Allows
   access to them before class initialization.
 - the proposed class declaration structure looks for being clear comfortable coming from
   other OOP languages.
-- variable initialization of referenced values (objects, arrays) must be done inside the constructor, otherwise you get the same
+- variable initialization of referenced values (objects, arrays) must be done inside the __init__, otherwise you get the same
   reference passed to all the instances.

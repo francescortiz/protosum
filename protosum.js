@@ -20,19 +20,19 @@
 (function(window) {
 
 
-    /**
-     * Bind a function to a context, making call and apply and other properties work as if no binding was applied.
-     * It is intended to be used with class methods. It is intended to automate calls to delegate, but might
-     * not be applied at all, because then delegating is used even when no delegating is needed. Less performance.
-     *
-     * A alternative could be to make a tool to automatically set
-     *     instance.delegated.method = __pc_bind_method__(instance.method, instance)
-     *
-     * @param func Function
-     * @param context *
-     * @return Function
-     * @private
-     */
+//    /**
+//     * Bind a function to a context, making call and apply and other properties work as if no binding was applied.
+//     * It is intended to be used with class methods. It is intended to automate calls to delegate, but might
+//     * not be applied at all, because then delegating is used even when no delegating is needed. Less performance.
+//     *
+//     * A alternative could be to make a tool to automatically set
+//     *     instance.delegated.method = __pc_bind_method__(instance.method, instance)
+//     *
+//     * @param func Function
+//     * @param context *
+//     * @return Function
+//     * @private
+//     */
 //    var __pc_bind_method__ = function(func, context) {
 //        var f = delegate(func, context);
 //        f.__pc_context__ = context;
@@ -82,24 +82,24 @@
         }
     };
 
-    /**
-     * delegate a function to an object.
-     * @param method {Function}
-     * @param instance {Object}
-     * @param [args] {Array} If provided, the function will receive this array as arguments instead of the provided by the caller.
-     * @return {Function}
-     */
-    var delegate = function (method, instance, args) {
-        if (args) {
-            return function () {
-                return method.apply(instance, args);
-            }
-        } else {
-            return function () {
-                return method.apply(instance, arguments);
-            }
-        }
-    }
+//    /**
+//     * delegate a function to an object.
+//     * @param method {Function}
+//     * @param instance {Object}
+//     * @param [args] {Array} If provided, the function will receive this array as arguments instead of the provided by the caller.
+//     * @return {Function}
+//     */
+//    var delegate = function (method, instance, args) {
+//        if (args) {
+//            return function () {
+//                return method.apply(instance, args);
+//            }
+//        } else {
+//            return function () {
+//                return method.apply(instance, arguments);
+//            }
+//        }
+//    }
 
     var getClassName = function (classReference) {
         // search through the global object for a name that resolves to this object
@@ -179,9 +179,11 @@
             throw new Error('First ProtoSum argument must be the class name.');
         }
 
+        // We want the JavascriptDebugger to show our instances named after className
         var protosum;
-        eval("var " + className + " = function(){this.constructor && this.constructor.apply(this,arguments);};");
+        eval("var " + className + " = function(){this.__init__ && this.__init__.apply(this,arguments);};");
         eval("protosum = " + className);
+
         protosum.__name__ = className;
         protosum.supers = [];
         protosum.prototype.__class__ = protosum;
@@ -192,9 +194,9 @@
 
         protosum.prototype.toString = __protosum_toString__;
 
-        protosum.prototype.delegate = function (method, args) {
-            return delegate(method, this, args);
-        }
+//        protosum.prototype.delegate = function (method, args) {
+//            return delegate(method, this, args);
+//        }
 
         protosum.prototype.isInstance = function (requestedSuper) {
             if (this instanceof requestedSuper) {
@@ -307,7 +309,7 @@
     }
 
     window.log = log;
-    window.delegate = delegate;
+//    window.delegate = delegate;
     window.ProtoSum = ProtoSum;
 
 })(window);
