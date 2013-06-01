@@ -308,6 +308,12 @@
         }
     }
 
+    /***
+     * Lightweight onready implementation. DOMReady is an array with a run method that executes all functions that it contains.
+     * Add functions to this array via DOMReady.push([function]) and put <script>DOMReady.run()</script> in the end of your
+     * HTML.
+     * @type {Array}
+     */
     var DOMReady = [];
     DOMReady.run = function() {
         var i,
