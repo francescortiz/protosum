@@ -308,6 +308,16 @@
         }
     }
 
+    var DOMReady = [];
+    DOMReady.run = function() {
+        var i,
+            len = this.length;
+        for (i = 0; i < len; i++) {
+            this[i]();
+        }
+    };
+
+    window.DOMReady = DOMReady;
     window.log = log;
 //    window.delegate = delegate;
     window.ProtoSum = ProtoSum;
