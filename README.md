@@ -2,10 +2,18 @@
 ProtoSum
 =========
 
-Javascript pythonish multiple inheritance class system.
+- Javascript pythonish multiple inheritance class system.
+- DOMReady: Lightweight DOMReady implementation.
 
 
-About
+About DOMReady
+-----------------
+
+Lightweight onready implementation. DOMReady is an array with a run method that executes all functions that it contains.
+Add functions to this array via DOMReady.push([function]) and put <script>DOMReady.run()</script> in the end of your HTML.
+
+
+About ProtoSum
 ----------------
 
 Framework to work with class inheritance. It is pythonish, so remember:
