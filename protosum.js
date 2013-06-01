@@ -109,10 +109,10 @@
     }
 
 
-    var __pacaclass_used_names__ = ",";
+    var __protosum_used_names__ = ",";
 
-    var __pacaclass_toString__ = function() {
-        return '[PacaClass: ' + this.__class__.__name__ + ']';
+    var __protosum_toString__ = function() {
+        return '[ProtoSum: ' + this.__class__.__name__ + ']';
     }
 
     /**
@@ -121,7 +121,7 @@
      * @return {*}
      * @private
      */
-    var __pacaclass_getSuper__ = function (requestedSuper) {
+    var __protosum_getSuper__ = function (requestedSuper) {
         var len = this.__class__.supers.length;
         if (requestedSuper) {
             for (var i = 0; i < len; i++) {
@@ -154,21 +154,21 @@
     /**
      * @return {Function}
      */
-    var PacaClass = function () {
+    var ProtoSum = function () {
 
 
-        var className = "PacaClass";
+        var className = "ProtoSum";
 
         var args = arguments ? arguments : [];
 
         if (typeof args[0] == "string") {
             var className = args[0];
-            if (__pacaclass_used_names__.indexOf("," + className + ",") != -1) {
-                log("PACACLASS WARNING: class name \"" + className + "\" already in use.");
+            if (__protosum_used_names__.indexOf("," + className + ",") != -1) {
+                log("PROTOSUM WARNING: class name \"" + className + "\" already in use.");
             }
-            __pacaclass_used_names__ += className + ",";
+            __protosum_used_names__ += className + ",";
             if (window[className]) {
-                log("PACACLASS WARNING: \"" + className + "\" is overwriting an existing window attribute.");
+                log("PROTOSUM WARNING: \"" + className + "\" is overwriting an existing window attribute.");
             }
             var na = [];
             for (var i = 1; i < args.length; i++) {
@@ -176,27 +176,27 @@
             }
             args = na;
         } else {
-            throw new Error('First PacaClass argument must be the class name.');
+            throw new Error('First ProtoSum argument must be the class name.');
         }
 
-        var pacaclass;
+        var protosum;
         eval("var " + className + " = function(){this.constructor && this.constructor.apply(this,arguments);};");
-        eval("pacaclass = " + className);
-        pacaclass.__name__ = className;
-        pacaclass.supers = [];
-        pacaclass.prototype.__class__ = pacaclass;
-        pacaclass.prototype.destroy = function () {
+        eval("protosum = " + className);
+        protosum.__name__ = className;
+        protosum.supers = [];
+        protosum.prototype.__class__ = protosum;
+        protosum.prototype.destroy = function () {
             // empty destructor
         }
-        pacaclass.prototype.getSuper = __pacaclass_getSuper__;
+        protosum.prototype.getSuper = __protosum_getSuper__;
 
-        pacaclass.prototype.toString = __pacaclass_toString__;
+        protosum.prototype.toString = __protosum_toString__;
 
-        pacaclass.prototype.delegate = function (method, args) {
+        protosum.prototype.delegate = function (method, args) {
             return delegate(method, this, args);
         }
 
-        pacaclass.prototype.isInstance = function (requestedSuper) {
+        protosum.prototype.isInstance = function (requestedSuper) {
             if (this instanceof requestedSuper) {
                 return true;
             }
@@ -214,27 +214,27 @@
         }
 
         if (!args.length) {
-            return pacaclass;
+            return protosum;
         }
 
-        single(pacaclass, args[0]);
-        pacaclass.supers.push(args[0]);
+        single(protosum, args[0]);
+        protosum.supers.push(args[0]);
         if (args[0].supers.length) {
-            pacaclass.supers = pacaclass.supers.concat(args[0].supers);
+            protosum.supers = protosum.supers.concat(args[0].supers);
         }
         for (var i = 1; i < args.length; i++) {
-            multi(pacaclass, args[i]);
-            pacaclass.supers.push(args[i]);
+            multi(protosum, args[i]);
+            protosum.supers.push(args[i]);
             if (args[i].supers.length) {
-                pacaclass.supers = pacaclass.supers.concat(args[i].supers);
+                protosum.supers = protosum.supers.concat(args[i].supers);
             }
         }
 
-        return pacaclass;
+        return protosum;
 
     };
 
-    PacaClass.settings = {
+    ProtoSum.settings = {
         /**
          * JS include base path. Makes code portable.
          */
@@ -247,7 +247,7 @@
      * @param [async] {Boolean}
      * @param [async_listener] {Function}
      */
-    PacaClass.include = function (src, async, async_listener) {
+    ProtoSum.include = function (src, async, async_listener) {
 
         if (!async) {
             async = false;
@@ -302,12 +302,12 @@
         if (src.indexOf("http") != -1) {
             AjaxPage(src, src, async);
         } else {
-            AjaxPage(src, PacaClass.settings.JS_PATH + src, async);
+            AjaxPage(src, ProtoSum.settings.JS_PATH + src, async);
         }
     }
 
     window.log = log;
     window.delegate = delegate;
-    window.PacaClass = PacaClass;
+    window.ProtoSum = ProtoSum;
 
 })(window);

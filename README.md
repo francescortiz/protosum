@@ -1,5 +1,5 @@
 
-PacaClass
+ProtoSum
 =========
 
 Javascript pythonish multiple inheritance class system.
@@ -15,7 +15,7 @@ Framework to work with class inheritance. It is pythonish, so remember:
   - Everything is public... well, we are on javascript, do your tricks if you need to.
   
  
-How does pacaclass compare to Twitter Flight
+How does protosum compare to Twitter Flight
 ---------------
   
 Now that twitter has released Flight http://twitter.github.com/flight/ , a javascript library that, among other things, follows a similar principle, it is good to see what differences you will find.
@@ -23,9 +23,9 @@ Instead of multiple inheritance they use mixins, a way of adding functionality t
 
 - real multiple inheritance (mixins overwrite your classes, instead of your class overwriting the superclasses).
 - the "isInstance" method supports multiple inheritance.
-- pacaclass gives you access to the prototype of superclasses. Twitter's Flight mixins overwrite your class.
+- protosum gives you access to the prototype of superclasses. Twitter's Flight mixins overwrite your class.
 
-Then, there are other features that you don't get with pacaclass, because it is only fucused in multiple inheritance, but that you will get with pacaclass-lib https://github.com/francescortiz/pacaclass-lib :
+Then, there are other features that you don't get with protosum, because it is only fucused in multiple inheritance, but that you will get with protosum-lib https://github.com/francescortiz/protosum-lib :
 
 - Event system (based on ActionScript 3 event system).
 - Dom integration (jquery or native).
@@ -36,13 +36,13 @@ Then, there are other features that you don't get with pacaclass, because it is 
 USAGE
 -----------
 
-- PacaClass([className], [main superclass], [superclass], [superclass], ...);
+- ProtoSum([className], [main superclass], [superclass], [superclass], ...);
   * Returns a subclass of the given classes
   * it popuplates [class].prototype.__class__ with a reference to the created class
   * if first argument is a string, it is used to populate [class].prototype.__class__.name
   * it popuplates [class].supers with an array af all superclassses.
     TODO: prevent repetitions in [class].supers array
-- PacaClass.include("path/to/javascript/file.js", [async=false], [async_callback]);
+- ProtoSum.include("path/to/javascript/file.js", [async=false], [async_callback]);
   * Behaves like import
   
 Then, for the instances you have:
@@ -58,7 +58,7 @@ EXAMPLE
 
 Sample class
 
-    var C = PacaClass(A, B); (function() {
+    var C = ProtoSum(A, B); (function() {
         var proto = C.prototype;
 
         proto.someVar = "somveValue";
@@ -110,20 +110,20 @@ Tests:
 Extras
 -----------
 
-### PacaClass.include
+### ProtoSum.include
 Loads javascript dynamically.
 
     // Makes code portable
-    PacaClass.settings.JS_PATH = '/path/';
+    ProtoSum.settings.JS_PATH = '/path/';
 
     // Code execution stops here until the script is available
-    PacaClass.include("file.js");
+    ProtoSum.include("file.js");
 
     // Don't lock code execution.
-    PacaClass.include("file.js", false); 
+    ProtoSum.include("file.js", false); 
 
     // When file.js is loaded, execute file_loaded("file.js");
-    PacaClass.include("file.js", false, file_loaded); 
+    ProtoSum.include("file.js", false, file_loaded); 
     
 ### log
 Simple logger.
@@ -134,7 +134,7 @@ Simple logger.
 Debugging tips
 -------------------
 
-- All pacaclass prototypes come with a __name__ attribute, and all instances come with __class__.__name__, if you defined a name for the class.
+- All protosum prototypes come with a __name__ attribute, and all instances come with __class__.__name__, if you defined a name for the class.
 - In crome classes appear encapsulated under a variable that is named after the class.
 
 
