@@ -40,9 +40,16 @@ ProtoSum assumes that you are an experienced OOP coder and that your JavaScript 
 - **[protosum-lib](http://github.com/francescortiz/protosum-lib)**: *This is what I use on my projects.* Event handling, DOM handling, Automapping\*, some more...
 - **protosum-components**: (nothing published yet) Components that help you with common tasks, like AJAX popups or photo galleries.
 
-\*Automapping deserves an explanation: usually you have '<div class="some-behaviour"></div>' and then you map 'some-behaivour' to the
-desired behaviour with something like '$('.some-behaviour').myBehaviour();'. Automapping saves you the need for '$('.some-behaviour').myBehaviour();'.
-Instead, define the div as '<div protosum="MyBehaviour"></div>'. That's all. You get complete separation between HTML/CSS and Javascript.
+\*Automapping deserves an explanation: usually you have
+
+    <div class="some-behaviour"></div>
+
+and then you map \'some-behaivour\' to the desired behaviour with something like '$(".some-behaviour").myBehaviour();'. Automapping saves you the need for '$(".some-behaviour").myBehaviour();'.
+Instead, define the div as
+
+    <div protosum="MyBehaviour"></div>
+
+That's all. You get complete separation between HTML/CSS and Javascript.
 
 
 USAGE
