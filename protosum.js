@@ -45,10 +45,47 @@
 //        f.apply = function(context, arguments) {
 //            return f.__pc_orig__.apply(context, arguments);
 //        }
+//        f.bind = function(context, arguments) {
+//            return f.__pc_orig__.bind.apply(context, arguments);
+//        }
 //        f.toString = func.toString;
 //        f.length = func.length;
 //        return f;
 //    }
+
+
+    /**
+     * An faster Array.prototype.slice.call(arguments) alternative
+     * @param {Object} args something with a length
+     * @param {Number} slice
+     * @param {Number} sliceEnd
+     * @api public
+     *
+     * @author Aaron Heckmann https://github.com/aheckmann/sliced
+     */
+
+    var sliced = function (args, slice, sliceEnd) {
+        var ret = [];
+        var len = args.length;
+
+        if (0 === len) return ret;
+
+        var start = slice < 0
+            ? Math.max(0, slice + len)
+            : slice || 0;
+
+        if (sliceEnd !== undefined) {
+            len = sliceEnd < 0
+                ? sliceEnd + len
+                : sliceEnd
+        }
+
+        while (len-- > start) {
+            ret[len - start] = args[len];
+        }
+
+        return ret;
+    }
 
 
     /**
@@ -61,45 +98,27 @@
             var sep = "";
             for (var i = 0; i < arguments.length; i++) {
                 var v = arguments[i];
+                m = m.concat(sep);
                 if (typeof v == 'string') {
-                    m += sep + '"' + v + '"';
+                    m = m.concat('"').concat(v).concat('"');
                 } else {
-                    m += sep + v;
+                    m = m.concat(v);
                 }
                 sep = ', ';
             }
-            stderr.innerHTML += m + "<br/>";
+            stderr.innerHTML = stderr.innerHTML.concat(m).concat("<br/>");
         } else {
             try {
                 console.log.apply(console, arguments);
             } catch (e) {
                 var m = "";
                 for (var i = 0; i < arguments.length; i++) {
-                    m += arguments[i] + ", ";
+                    m = m.concat(arguments[i]).concat(", ");
                 }
                 alert(m);
             }
         }
     };
-
-//    /**
-//     * delegate a function to an object.
-//     * @param method {Function}
-//     * @param instance {Object}
-//     * @param [args] {Array} If provided, the function will receive this array as arguments instead of the provided by the caller.
-//     * @return {Function}
-//     */
-//    var delegate = function (method, instance, args) {
-//        if (args) {
-//            return function () {
-//                return method.apply(instance, args);
-//            }
-//        } else {
-//            return function () {
-//                return method.apply(instance, arguments);
-//            }
-//        }
-//    }
 
     var getClassName = function (classReference) {
         // search through the global object for a name that resolves to this object
@@ -112,7 +131,7 @@
     var __protosum_used_names__ = ",";
 
     var __protosum_toString__ = function() {
-        return '[ProtoSum: ' + this.__class__.__name__ + ']';
+        return '[ProtoSum: '.concat(this.__class__.__name__).concat(']');
     }
 
     /**
@@ -130,7 +149,7 @@
                     return _super.prototype;
                 }
             }
-            throw new Error("getSuper: " + getClassName(requestedSuper) + " is not a superclass of " + getClassName(this.__class__))
+            throw new Error("getSuper: ".concat(getClassName(requestedSuper)).concat(" is not a superclass of ").concat(getClassName(this.__class__)))
         } else {
             if (len) {
                 return this.__class__.supers[0];
@@ -163,12 +182,12 @@
 
         if (typeof args[0] == "string") {
             var className = args[0];
-            if (__protosum_used_names__.indexOf("," + className + ",") != -1) {
-                log("PROTOSUM WARNING: class name \"" + className + "\" already in use.");
+            if (__protosum_used_names__.indexOf(",".concat(className).concat(",")) != -1) {
+                log("PROTOSUM WARNING: class name \"".concat(className).concat("\" already in use."));
             }
-            __protosum_used_names__ += className + ",";
+            __protosum_used_names__ = __protosum_used_names__.concat(className).concat(",");
             if (window[className]) {
-                log("PROTOSUM WARNING: \"" + className + "\" is overwriting an existing window attribute.");
+                log("PROTOSUM WARNING: \"".concat(className).concat("\" is overwriting an existing window attribute."));
             }
             var na = [];
             for (var i = 1; i < args.length; i++) {
@@ -180,9 +199,9 @@
         }
 
         // We want the JavascriptDebugger to show our instances named after className
-        var protosum;
-        eval("var " + className + " = function(){this.__init__ && this.__init__.apply(this,arguments);};");
-        eval("protosum = " + className);
+        var protosum = (new Function(
+            "var ".concat(className).concat(" = function(){this.__init__ && this.__init__.apply(this,arguments);}; return ").concat(className)
+        ))();
 
         protosum.__name__ = className;
         protosum.supers = [];
@@ -290,7 +309,7 @@
                             }
                         }
                     } else {
-                        log('XML request error: ' + oXmlHttp.statusText + ' (' + oXmlHttp.status + ')');
+                        log('XML request error: '.concat(oXmlHttp.statusText).concat(' (').concat(oXmlHttp.status).concat(')'));
                     }
                 }
             }
@@ -304,7 +323,7 @@
         if (src.indexOf("http") != -1) {
             AjaxPage(src, src, async);
         } else {
-            AjaxPage(src, ProtoSum.settings.JS_PATH + src, async);
+            AjaxPage(src, ProtoSum.settings.JS_PATH.concat(src), async);
         }
     }
 
@@ -327,5 +346,6 @@
     window.log = log;
 //    window.delegate = delegate;
     window.ProtoSum = ProtoSum;
+    window.sliced = sliced;
 
 })(window);

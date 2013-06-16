@@ -6,27 +6,45 @@ ProtoSum
 - DOMReady: Lightweight DOMReady implementation.
 
 
-About DOMReady
------------------
-
-Lightweight onready implementation. DOMReady is an array with a run method that executes all functions that it contains.
-Add functions to this array via DOMReady.push([function]) and put
-
-    <script>DOMReady.run()</script>
-
-to the end of your HTML.
-
-
 About ProtoSum
 ----------------
 
 Framework to work with class inheritance. It is pythonish, so remember:
 
   - You have multiple inheritance
-  - Always use this ot access methods or atributes
+  - Always use this to access methods or atributes
   - Everything is public... well, we are on javascript, do your tricks if you need to.
   
- 
+
+Why
+-------------
+
+In short:
+
+- **Readability:** define classes with their members. From methods or static function call other class members or trigger events. No need for nesting.
+- **Easier debugging:** when you call console.log and it hits a ProtoSum instance it is named after the class in Chrome. Also, string representations follows the class name (no more "[Object object]")
+- **Performance:** class inheritance (AKA mixin) is applied on class definition instead of on instance initialization.
+- **Short learning curve coming from OOP**: The way you define classes looks very familiar to people who come from other OOP languages like Java or ActionScript3.
+
+In other words, I've been using ProtoSum for one year now and it allowed me to solve complex algorithms in a very clear way. And when something is complex, clearness and code
+separation are your best friends.
+
+
+### What you need to know ###
+
+ProtoSum assumes that you are an experienced OOP coder and that your JavaScript knowledge is far beyond jQuery.
+
+
+### Related projects ###
+
+- **[protosum-lib](http://github.com/francescortiz/protosum-lib)**: *This is what I use on my projects.* Event handling, DOM handling, Automapping\*, some more...
+- **protosum-components**: (nothing published yet) Components that help you with common tasks, like AJAX popups or photo galleries.
+
+\*Automapping deserves an explanation: usually you have '<div class="some-behaviour"></div>' and then you map 'some-behaivour' to the
+desired behaviour with something like '$('.some-behaviour').myBehaviour();'. Automapping saves you the need for '$('.some-behaviour').myBehaviour();'.
+Instead, define the div as '<div protosum="MyBehaviour"></div>'. That's all. You get complete separation between HTML/CSS and Javascript.
+
+
 USAGE
 -----------
 
@@ -137,8 +155,6 @@ LIMITATIONS
 
 - Forget about private. But since the implementation is pythonish, and python doesn't
   have the concept of private, it is fine.
-- Always provide a __init__, unless you are sure that no superclass has a
-  __init__, to prevent unwanted repeated __init__ calls.
 
 
 CONSIDERATIONS
@@ -151,3 +167,16 @@ CONSIDERATIONS
   other OOP languages.
 - variable initialization of referenced values (objects, arrays) must be done inside the __init__, otherwise you get the same
   reference passed to all the instances.
+
+
+DOMReady
+=============
+
+Lightweight onready implementation. DOMReady is an array with a run method that executes all functions that it contains.
+Add functions to this array via DOMReady.push([function]) and put
+
+    <script>DOMReady.run()</script>
+
+to the end of your HTML.
+
+
