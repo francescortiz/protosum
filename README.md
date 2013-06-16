@@ -21,13 +21,13 @@ Why
 
 In short:
 
-- **Readability:** define classes with their members. From methods or static function call other class members or trigger events. No need for nesting.
+- **Readability:** define classes with their members. From methods or static functions call other class members or trigger events. No need for nesting.
 - **Easier debugging:** when you call console.log and it hits a ProtoSum instance it is named after the class in Chrome. Also, string representations follows the class name (no more "[Object object]")
 - **Performance:** class inheritance (AKA mixin) is applied on class definition instead of on instance initialization.
 - **Short learning curve coming from OOP**: The way you define classes looks very familiar to people who come from other OOP languages like Java or ActionScript3.
 
-In other words, I've been using ProtoSum for one year now and it allowed me to solve complex algorithms in a very clear way. And when something is complex, clearness and code
-separation are your best friends.
+In other words, I've been using ProtoSum for one year now and it allowed me to solve complex algorithms in a very clear
+way with everything defined in the right place. And when something is complex, clearness and code organization are your best friends.
 
 
 ### What you need to know ###
